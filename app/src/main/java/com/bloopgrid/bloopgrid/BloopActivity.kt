@@ -18,7 +18,6 @@ import android.support.v4.content.ContextCompat.getSystemService
 import android.view.LayoutInflater
 
 
-
 class BloopActivity : AppCompatActivity() {
 
     val TAG = "BloopActivity"
@@ -26,7 +25,6 @@ class BloopActivity : AppCompatActivity() {
     val cellSize = 100  // 100dp square
 
     val viewMatrix = mutableListOf<LinearLayout>()
-
 
 
     fun buildCell(inflater: LayoutInflater): View {
@@ -41,39 +39,31 @@ class BloopActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bloop)
 
-        initGrid(grid_container)
+//        initGrid(grid_container)
     }
 
-    fun initGrid(view: View) {
-        if (view is LinearLayout) {
-            val containerWidth = view.width
-            val containerHeight = view.height
+    fun initGrid(containerWidth: Int, containerHeight: Int) {
+        Log.i(TAG, "width: $containerWidth, height: $containerHeight")
 
-            Log.i(TAG, "width: $containerWidth, height: $containerHeight")
+        val numColumns = 10
+        val numRows = 10
 
-            val numColumns = 10
-            val numRows = 10
+        var inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-            var inflater = this.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        for (row in 0..numRows) {
+            val rowLayout = LinearLayout(this)
+            rowLayout.orientation = LinearLayout.HORIZONTAL
 
-            view.weightSum = numRows.toFloat()
-            for (row in 0..numRows) {
-                val rowLayout = LinearLayout(this)
-                rowLayout.orientation = LinearLayout.HORIZONTAL
+            rowLayout.weightSum = numColumns.toFloat()
 
-                rowLayout.weightSum = numColumns.toFloat()
-
-                for (column in 0..numColumns) {
-                    val newCell = buildCell(inflater)
-                    rowLayout.addView(newCell)
-                    Log.i(TAG, "Creating row $row, column $column")
-                }
-                rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT)
-
-                view.addView(rowLayout)
-
+            for (column in 0..numColumns) {
+                val newCell = buildCell(inflater)
+                rowLayout.addView(newCell)
+                Log.i(TAG, "Creating row $row, column $column")
             }
+            rowLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT)
+
         }
     }
 }
